@@ -1,0 +1,13 @@
+{
+  "name": "404-xmd-bot",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0",
+    "express": "^4.18.2"
+  }
+}

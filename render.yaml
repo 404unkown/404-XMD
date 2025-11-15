@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: 404-xmd-bot
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: SESSION_ID
+        sync: false
