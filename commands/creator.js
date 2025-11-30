@@ -3,59 +3,103 @@
 const creator = {
     name: "NUCH",
     number: "+254769769295",
-    bio: "Bot Developer & Programmer",
-
+    bio: "FULL STACK DEVELOPER & BOT ARCHITECT",
+    location: "KENYA 🇰🇪",
+    
     social: {
         instagram: "https://instagram.com/manuwesonga",
         github: "https://github.com/404unkown",
         youtube: "https://youtube.com/404unkown"
     },
 
-    skills: ["JavaScript", "Node.js", "Bot Development", "Web Development"],
+    skills: ["JAVASCRIPT", "NODE.JS", "REACT", "PYTHON", "MONGODB", "API DEVELOPMENT"],
+    
+    services: [
+        "CUSTOM WHATSAPP BOTS",
+        "WEB DEVELOPMENT", 
+        "MOBILE APPLICATIONS",
+        "API INTEGRATION",
+        "AUTOMATION TOOLS"
+    ],
 
-    message: "Thanks for using my bot! 🚀"
+    message: "LET'S BUILD SOMETHING LEGENDARY TOGETHER! 🚀"
 };
 
 async function creatorCommand(sock, chatId) {
     try {
-        console.log('🔧 Creator command triggered for chat:', chatId); // Debug log
-        
+        console.log('🎯 CREATOR COMMAND ACTIVATED');
+
         const creatorText = `
-👑 *CREATOR INFORMATION*
+█████████████████████████████████████████████████
+█▄─▄▄▀█─▄▄─█▄─▀─▄█▄─▄▄─█▄─▄▄▀█▄─█─▄█▄─▄█▄─▀█▄─▄█
+██─▄─▄█─██─██▀─▀███─▄▄▄██─▄─▄██▄─▄███─███─█▄▀─██
+▀▄▄▀▄▄▀▄▄▄▄▀▄▄█▄▄▀▄▄▄▀▀▀▄▄▀▄▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▀▄▄▀
 
-🤵 *Name:* ${creator.name}
-📱 *Contact:* ${creator.number}
-📝 *Bio:* ${creator.bio}
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓ ██████  ██████  ██   ██ ███████ ██████  ▓
+▓██    ██ ██   ██ ██  ██  ██      ██   ██ ▓  
+▓██    ██ ██████  █████   █████   ██████  ▓
+▓██    ██ ██   ██ ██  ██  ██      ██   ██ ▓
+▓ ██████  ██████  ██   ██ ███████ ██   ██ ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
-🌐 *Social Media:*
-📷 Instagram: ${creator.social.instagram}
-💻 GitHub: ${creator.social.github}
-🎥 YouTube: ${creator.social.youtube}
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+◼ 🔥 CREATOR IDENTITY 🔥                        ◼
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
 
-💡 *Skills:* ${creator.skills.join(", ")}
+◼ NAME: ${creator.name}
+◼ CONTACT: ${creator.number}
+◼ LOCATION: ${creator.location}
+◼ BIO: ${creator.bio}
+
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+◼ 🌐 DIGITAL PRESENCE 🌐                       ◼
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+
+◼ INSTAGRAM: ${creator.social.instagram}
+◼ GITHUB: ${creator.social.github}
+◼ YOUTUBE: ${creator.social.youtube}
+
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+◼ ⚡ TECHNICAL MASTERY ⚡                       ◼
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+
+${creator.skills.map(skill => `◼ ${skill}`).join('\n')}
+
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+◼ 🛠️ PROFESSIONAL SERVICES 🛠️                  ◼
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+
+${creator.services.map(service => `◼ ${service}`).join('\n')}
+
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
 
 ${creator.message}
-        `.trim();
 
-        console.log('📤 Sending creator info...'); // Debug log
-        
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+◼ 🚀 READY FOR NEXT-LEVEL COLLABORATION? 🚀     ◼
+◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+`.trim();
+
+        console.log('🎯 SENDING BOLD CREATOR PROFILE');
+
         await sock.sendMessage(chatId, { 
             text: creatorText,
             contextInfo: {
-                forwardingScore: 1,
+                forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '0029Vb5ytZEE50UbwV7xBv1k@newsletter',
+                    newsletterJid: '120363401269012709@newsletter',
                     newsletterName: '404 XMD',
                     serverMessageId: -1
                 }
             }
         });
-        
-        console.log('✅ Creator info sent successfully!'); // Debug log
-        
+
+        console.log('✅ BOLD PROFILE DELIVERED!');
+
     } catch (error) {
-        console.error('❌ Error in creator command:', error); // Error log
+        console.error('💥 CREATOR COMMAND FAILED:', error);
     }
 }
 
