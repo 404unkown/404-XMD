@@ -245,7 +245,7 @@ async function helpCommand(sock, chatId, message) {
 │        💻 *GITHUB*            │
 ╰───────────────────────────────╯
 ┌─┬─────────────────────────────┐
-│🐙│ .git                       │
+│🐙│ .git     {💀}.creator      │
 │🔷│ .github                    │
 │📜│ .sc                        │
 │📝│ .script                    │
