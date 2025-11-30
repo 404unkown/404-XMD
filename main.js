@@ -83,6 +83,7 @@ const { truthCommand } = require('./commands/truth');
 const { clearCommand } = require('./commands/clear');
 const pingCommand = require('./commands/ping');
 const aliveCommand = require('./commands/alive');
+const creatorCommand = require('./commands/creator');
 const blurCommand = require('./commands/img-blur');
 const { welcomeCommand, handleJoinEvent } = require('./commands/welcome');
 const { goodbyeCommand, handleLeaveEvent } = require('./commands/goodbye');
