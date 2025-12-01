@@ -143,6 +143,7 @@ const { anticallCommand, readState: readAnticallState } = require('./commands/an
 const { pmblockerCommand, readState: readPmBlockerState } = require('./commands/pmblocker');
 const settingsCommand = require('./commands/settings');
 const soraCommand = require('./commands/sora');
+const { autoreplyCommand, handleAutoReply } = require('./commands/autoreply');
 
 
 // Global settings
@@ -301,6 +302,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         if (!userMessage.startsWith('.')) {
             // Show typing indicator if autotyping is enabled
             await handleAutotypingForMessage(sock, chatId, userMessage);
+            await handleAutoReply(sock, message);
 
             if (isGroup) {
                 // Always run moderation features (antitag) regardless of mode
@@ -324,7 +326,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         const isAdminCommand = adminCommands.some(cmd => userMessage.startsWith(cmd));
 
         // List of owner commands
-        const ownerCommands = ['.mode', '.autostatus', '.antidelete', '.cleartmp', '.setpp', '.clearsession', '.areact', '.autoreact', '.autotyping', '.autoread', '.pmblocker'];
+        const ownerCommands = ['.mode', '.autostatus', '.antidelete', '.cleartmp', '.setpp', '.clearsession', '.areact', '.autoreact', '.autotyping', '.autoread', '.pmblocker', '.auto'];
         const isOwnerCommand = ownerCommands.some(cmd => userMessage.startsWith(cmd));
 
         let isSenderAdmin = false;
@@ -375,7 +377,20 @@ async function handleMessages(sock, messageUpdate, printLog) {
 case userMessage === '.creator':
     await creatorCommand(sock, chatId);
     break;
-        
+    
+     case userMessage.startsWith('.auto'):
+    const rawText = (
+        message.message?.conversation?.trim() ||
+        message.message?.extendedTextMessage?.text?.trim() ||
+        message.message?.imageMessage?.caption?.trim() ||
+        message.message?.videoMessage?.caption?.trim() ||
+        ''
+    );
+    const autoArgs = rawText.slice(5).trim().split(/\s+/);
+    await autoreplyCommand(sock, chatId, autoArgs, message);
+    commandExecuted = true;
+    break;
+     
             case userMessage === '.simage': {
                 const quotedMessage = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
                 if (quotedMessage?.stickerMessage) {
