@@ -3,85 +3,80 @@
 const creator = {
     name: "NUCH",
     number: "+254769769295",
-    bio: "FULL STACK DEVELOPER & BOT ARCHITECT",
-    location: "KENYA 🇰🇪",
+    bio: "Full Stack Developer & Bot Creator",
+    location: "Kenya 🇰🇪",
     
     social: {
         instagram: "https://instagram.com/manuwesonga",
-        github: "https://github.com/404unkown",
+        github: "https://github.com/404unkown", 
         youtube: "https://youtube.com/404unkown"
     },
 
-    skills: ["JAVASCRIPT", "NODE.JS", "REACT", "PYTHON", "MONGODB", "API DEVELOPMENT"],
+    skills: ["JavaScript", "Node.js", "React", "Python", "MongoDB", "API Development"],
     
     services: [
-        "CUSTOM WHATSAPP BOTS",
-        "WEB DEVELOPMENT", 
-        "MOBILE APPLICATIONS",
-        "API INTEGRATION",
-        "AUTOMATION TOOLS"
+        "🤖 Custom WhatsApp Bots",
+        "💻 Web Development", 
+        "📱 Mobile Apps",
+        "⚡ API Integration",
+        "🔧 Automation Tools"
     ],
 
-    message: "LET'S BUILD SOMETHING LEGENDARY TOGETHER! 🚀"
+    message: "Let's build something amazing together! 🚀"
 };
 
 async function creatorCommand(sock, chatId) {
     try {
-        console.log('🎯 CREATOR COMMAND ACTIVATED');
+        console.log('🎯 Creator command activated for:', chatId);
+
+        // Create a cool ASCII art banner
+        const banner = `
+╔══════════════════════════════════════╗
+║             👑 CREATOR PROFILE       ║
+╚══════════════════════════════════════╝
+        `.trim();
 
         const creatorText = `
-█████████████████████████████████████████████████
-█▄─▄▄▀█─▄▄─█▄─▀─▄█▄─▄▄─█▄─▄▄▀█▄─█─▄█▄─▄█▄─▀█▄─▄█
-██─▄─▄█─██─██▀─▀███─▄▄▄██─▄─▄██▄─▄███─███─█▄▀─██
-▀▄▄▀▄▄▀▄▄▄▄▀▄▄█▄▄▀▄▄▄▀▀▀▄▄▀▄▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▀▄▄▀
+${banner}
 
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓ ██████  ██████  ██   ██ ███████ ██████  ▓
-▓██    ██ ██   ██ ██  ██  ██      ██   ██ ▓  
-▓██    ██ ██████  █████   █████   ██████  ▓
-▓██    ██ ██   ██ ██  ██  ██      ██   ██ ▓
-▓ ██████  ██████  ██   ██ ███████ ██   ██ ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+🌟 *ABOUT ME*
 
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-◼ 🔥 CREATOR IDENTITY 🔥                        ◼
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+┌──────────────────────────────────────┐
+│ 🤵 *Name:* ${creator.name}
+│ 📱 *Contact:* ${creator.number}  
+│ 📍 *Location:* ${creator.location}
+│ 💼 *Bio:* ${creator.bio}
+└──────────────────────────────────────┘
 
-◼ NAME: ${creator.name}
-◼ CONTACT: ${creator.number}
-◼ LOCATION: ${creator.location}
-◼ BIO: ${creator.bio}
+🔗 *CONNECT WITH ME*
 
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-◼ 🌐 DIGITAL PRESENCE 🌐                       ◼
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+┌──────────────────────────────────────┐
+│ 📷 *Instagram:* ${creator.social.instagram}
+│ 💻 *GitHub:* ${creator.social.github}
+│ 🎥 *YouTube:* ${creator.social.youtube}
+└──────────────────────────────────────┘
 
-◼ INSTAGRAM: ${creator.social.instagram}
-◼ GITHUB: ${creator.social.github}
-◼ YOUTUBE: ${creator.social.youtube}
+💡 *TECH STACK*
 
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-◼ ⚡ TECHNICAL MASTERY ⚡                       ◼
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+┌──────────────────────────────────────┐
+│ ${creator.skills.map(skill => `▸ ${skill}`).join('\n│ ')}
+└──────────────────────────────────────┘
 
-${creator.skills.map(skill => `◼ ${skill}`).join('\n')}
+🛠️ *SERVICES OFFERED*
 
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-◼ 🛠️ PROFESSIONAL SERVICES 🛠️                  ◼
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-
-${creator.services.map(service => `◼ ${service}`).join('\n')}
-
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+┌──────────────────────────────────────┐
+│ ${creator.services.map(service => `▸ ${service}`).join('\n│ ')}
+└──────────────────────────────────────┘
 
 ${creator.message}
 
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-◼ 🚀 READY FOR NEXT-LEVEL COLLABORATION? 🚀     ◼
-◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
-`.trim();
+💬 *Need a custom bot or website?*
+📩 *DM me for collaborations & projects!*
 
-        console.log('🎯 SENDING BOLD CREATOR PROFILE');
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        `.trim();
+
+        console.log('🚀 Sending epic creator profile...');
 
         await sock.sendMessage(chatId, { 
             text: creatorText,
@@ -96,10 +91,10 @@ ${creator.message}
             }
         });
 
-        console.log('✅ BOLD PROFILE DELIVERED!');
+        console.log('✅ Epic creator profile delivered!');
 
     } catch (error) {
-        console.error('💥 CREATOR COMMAND FAILED:', error);
+        console.error('💥 Creator command failed:', error);
     }
 }
 
