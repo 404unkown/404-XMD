@@ -66,7 +66,15 @@ async function autoreplyCommand(sock, chatId, args, message) {
         return;
     }
     
-    const subCommand = args[0].toLowerCase();
+    console.log('🔍 Auto-reply args received:', args);
+    
+    // If first arg is "reply", skip it
+    let actualArgs = args;
+    if (args[0] && args[0].toLowerCase() === 'reply') {
+        actualArgs = args.slice(1);
+    }
+    
+    const subCommand = actualArgs[0].toLowerCase();
     
     switch (subCommand) {
         case 'on':
@@ -86,7 +94,7 @@ async function autoreplyCommand(sock, chatId, args, message) {
             break;
             
         case 'message':
-            const newMessage = args.slice(1).join(' ');
+            const newMessage = actualArgs.slice(1).join(' ');
             if (!newMessage.trim()) {
                 await sock.sendMessage(chatId, { 
                     text: '📝 Please provide a message. Example:\n.auto reply message I\'m busy right now, please leave a message.'
