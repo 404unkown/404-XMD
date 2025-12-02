@@ -9,7 +9,7 @@ const creator = {
     social: {
         instagram: "https://instagram.com/manuwesonga",
         github: "https://github.com/404unkown", 
-        youtube: "https://youtube.com/404unkown"
+        youtube: "https://youtube.com/404TECH"
     },
 
     skills: ["JavaScript", "Node.js", "React", "Python", "MongoDB", "API Development"],
