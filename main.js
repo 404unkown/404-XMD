@@ -143,6 +143,7 @@ const { anticallCommand, readState: readAnticallState } = require('./commands/an
 const { pmblockerCommand, readState: readPmBlockerState } = require('./commands/pmblocker');
 const settingsCommand = require('./commands/settings');
 const soraCommand = require('./commands/sora');
+const { autoreplyCommand, handleAutoreply } = require('./commands/autoreply');
 
 
 // Global settings
@@ -301,6 +302,10 @@ async function handleMessages(sock, messageUpdate, printLog) {
         if (!userMessage.startsWith('.')) {
             // Show typing indicator if autotyping is enabled
             await handleAutotypingForMessage(sock, chatId, userMessage);
+            // Handle autoreply for private messages
+if (!isGroup) {
+    await handleAutoreply(sock, chatId, senderId, userMessage, message);
+}
 
             if (isGroup) {
                 // Always run moderation features (antitag) regardless of mode
@@ -374,6 +379,10 @@ async function handleMessages(sock, messageUpdate, printLog) {
         switch (true) {
 case userMessage === '.creator':
     await creatorCommand(sock, chatId);
+    break;
+case userMessage.startsWith('.autoreply'):
+    await autoreplyCommand(sock, chatId, message);
+    commandExecuted = true;
     break;
         
             case userMessage === '.simage': {
