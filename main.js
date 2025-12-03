@@ -144,6 +144,7 @@ const { pmblockerCommand, readState: readPmBlockerState } = require('./commands/
 const settingsCommand = require('./commands/settings');
 const soraCommand = require('./commands/sora');
 const { autoreplyCommand, handleAutoreply } = require('./commands/autoreply');
+const { vcfCommand } = require('./commands/vcf');
 
 
 // Global settings
@@ -382,6 +383,10 @@ case userMessage === '.creator':
     break;
 case userMessage.startsWith('.autoreply'):
     await autoreplyCommand(sock, chatId, message);
+    commandExecuted = true;
+    break;
+case userMessage === '.vcf':
+    await vcfCommand(sock, chatId, message);
     commandExecuted = true;
     break;
         
