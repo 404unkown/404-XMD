@@ -12,7 +12,7 @@ async function helpCommand(sock, chatId, message) {
 │        🤖 *BOT INFO*          │
 ├───────────────────────────────┤
 │ • Name: ${settings.botName || '404-XMD'} 
-│ • Version: ${settings.version || '3.0.0'}
+│ • Version: ${settings.version || '2.0.0'}
 │ • Owner: ${settings.botOwner || 'Nuch'}
 │ • YouTube: ${global.ytch}
 ╰───────────────────────────────╯
