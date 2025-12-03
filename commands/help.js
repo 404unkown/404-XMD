@@ -57,7 +57,9 @@ async function helpCommand(sock, chatId, message) {
 │⚠️ │ .warnings @user           │
 │🚨│ .warn @user                │
 │🔗│ .antilink                  │
-│🚫│ .antibadword               │
+│🚫│ .antibadword <on/off>      │
+│📋│ .antibadword list          │
+│📊│ .antibadword status        │
 │🧹│ .clear                     │
 │🏷️ │ .tag <message>            │
 │👥│ .tagall                    │
@@ -71,6 +73,7 @@ async function helpCommand(sock, chatId, message) {
 │📝│ .setgdesc <description>    │
 │🏷️ │ .setgname <new name>      │
 │🖼️ │ .setgpp (reply to image)  │
+│📇│ .vcf (Export group contacts)│
 └─┴─────────────────────────────┘
 
 ╭───────────────────────────────╮
@@ -93,8 +96,9 @@ async function helpCommand(sock, chatId, message) {
 │🚫│ .pmblocker <on/off/status> │
 │💬│ .pmblocker setmsg <text>   │
 │📍│ .setmention <reply to msg> │
-│🔖│ .mention <on/off>  
-      .autoreply <on/off>  
+│🔖│ .mention <on/off>          │
+│💬│ .autoreply <on/off>        │
+│💬│ .autoreply on <message>    │
 └─┴─────────────────────────────┘
 
 ╭───────────────────────────────╮
@@ -253,7 +257,44 @@ async function helpCommand(sock, chatId, message) {
 │📂│ .repo                      │
 └─┴─────────────────────────────┘
 
-📢 *Join my channel for updates!*`;
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃          📢 *NEW FEATURES*          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+╭───────────────────────────────╮
+│        💬 *AUTOREPLY*         │
+├───────────────────────────────┤
+│ .autoreply on [message]       │
+│ .autoreply off                │
+│ .autoreply (check status)     │
+├───────────────────────────────┤
+│ Auto-replies to private       │
+│ messages when enabled         │
+╰───────────────────────────────╯
+
+╭───────────────────────────────╮
+│        📇 *VCF EXPORT*        │
+├───────────────────────────────┤
+│ .vcf                          │
+├───────────────────────────────┤
+│ Export all group contacts     │
+│ to VCF file for easy import   │
+│ (Admin only)                  │
+╰───────────────────────────────╯
+
+╭───────────────────────────────╮
+│        🚫 *ANTIBADWORD*       │
+├───────────────────────────────┤
+│ .antibadword on/off           │
+│ .antibadword status           │
+│ .antibadword list             │
+├───────────────────────────────┤
+│ Auto-deletes messages with    │
+│ bad words (Bot must be admin) │
+╰───────────────────────────────╯
+
+📢 *Join our channel for updates!*
+${global.channelLink || 'https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A'}`;
 
     try {
         const imagePath = path.join(__dirname, '../assets/bot_image.jpg');
@@ -273,7 +314,7 @@ async function helpCommand(sock, chatId, message) {
                         serverMessageId: -1
                     }
                 }
-            },{ quoted: message });
+            }, { quoted: message });
         } else {
             console.error('Bot image not found at:', imagePath);
             await sock.sendMessage(chatId, { 
