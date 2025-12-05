@@ -84,7 +84,7 @@ async function pingCommand(sock, chatId, message) {
 
         // **METHOD 1: Try sending as voice note (PTT) - Best for auto-play**
         try {
-            const audioResponse = await axios.get('https://files.catbox.moe/igtxrn.mp3', {
+            const audioResponse = await axios.get('https://files.catbox.moe/mhmstw.mp3', {
                 responseType: 'arraybuffer',
                 timeout: 15000,
                 headers: {
