@@ -1,7 +1,5 @@
 const axios = require('axios');
 const os = require('os');
-const fs = require('fs');
-const path = require('path');
 const settings = require('../settings.js');
 
 function formatTime(seconds) {
@@ -21,13 +19,14 @@ function formatTime(seconds) {
     return time.trim();
 }
 
+function getRandomIcon(icons) {
+    return icons[Math.floor(Math.random() * icons.length)];
+}
+
 async function pingCommand(sock, chatId, message) {
     try {
         const start = Date.now();
-        const pingMsg = await sock.sendMessage(chatId, { 
-            text: '🎵 *Booting Audio System...*\n⚡ *Measuring Ping...*' 
-        }, { quoted: message });
-        
+        await sock.sendMessage(chatId, { text: '🚀 *Turbo Pinging...*' }, { quoted: message });
         const end = Date.now();
         const ping = Math.round((end - start) / 2);
 
@@ -39,134 +38,142 @@ async function pingCommand(sock, chatId, message) {
         const freeMem = Math.round(os.freemem() / (1024 * 1024 * 1024) * 100) / 100;
         const usedMem = totalMem - freeMem;
         const platform = os.platform();
+        
+        // Dynamic icons based on ping
+        const pingIcon = ping < 100 ? '⚡' : ping < 500 ? '🚀' : '🐢';
+        const statusIcon = ping < 200 ? '🟢' : ping < 500 ? '🟡' : '🔴';
+        
+        // Random cool icons
+        const icons = {
+            cpu: getRandomIcon(['⚙️', '🔧', '🎛️', '💻']),
+            ram: getRandomIcon(['🧠', '💾', '🎚️', '📊']),
+            os: getRandomIcon(['🖥️', '📱', '💿', '🖱️']),
+            version: getRandomIcon(['🎯', '📦', '🏷️', '🔖'])
+        };
 
-        // Ping-based styling
-        let pingEmoji, pingStatus, pingColor;
-        if (ping < 100) {
-            pingEmoji = '⚡';
-            pingStatus = 'ULTRA FAST';
-            pingColor = '🟢';
-        } else if (ping < 300) {
-            pingEmoji = '🚀';
-            pingStatus = 'FAST';
-            pingColor = '🟡';
-        } else {
-            pingEmoji = '🐌';
-            pingStatus = 'STABLE';
-            pingColor = '🔴';
-        }
-
-        // Create cool ASCII banner
         const botInfo = `
-╭━━━━━━━━━━━━━━━━━━━ 404-X𝐌𝐃 ━━━━━━━━━━━━━━━━━━━╮
-│                                                 │
-│  ${pingEmoji}  *PING*: ${ping}ms ${pingColor}          │
-│  ⏱️  *UPTIME*: ${uptimeFormatted}               │
-│  🏷️  *VERSION*: v${settings.version}           │
-│                                                 │
-│  ──────《 📊 SYSTEM INFO 》──────               │
-│  🖥️  *PLATFORM*: ${platform.toUpperCase()}     │
-│  💾  *MEMORY*: ${usedMem.toFixed(2)}GB/${totalMem.toFixed(2)}GB │
-│  🐧  *OS*: ${os.type()} ${os.release()}        │
-│                                                 │
-│  🎯  *RESPONSE*: ${pingStatus}                 │
-│                                                 │
-│  🎵  *AUDIO*: Auto-play enabled ✅              │
-╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯`.trim();
+╔═══════════《 404-X𝐌𝐃 》═══════════╗
+║                                             ║
+║  ${pingIcon} *PING*: ${ping}ms ${statusIcon}
+║  ⏱️ *UPTIME*: ${uptimeFormatted}
+║  ${icons.version} *VERSION*: v${settings.version}
+║                                             ║
+║  ───《 SYSTEM INFO 》────
+║  ${icons.cpu} *PLATFORM*: ${platform.toUpperCase()}
+║  ${icons.ram} *MEMORY*: ${usedMem}GB / ${totalMem}GB
+║  ${icons.os} *OS*: ${os.type()} ${os.release()}
+║                                             ║
+║  🔥 *Response Time*: ${ping < 100 ? 'ULTRA FAST' : ping < 300 ? 'FAST' : 'STABLE'}
+║                                             ║
+║  🎵 *Audio Status*: Loading...
+╚═══════════════════════════════════════╝`.trim();
 
-        // Send the main status with image
+        // Send the catbox image with animated caption
         await sock.sendMessage(chatId, {
             image: { 
                 url: 'https://files.catbox.moe/852x91.jpeg'
             },
-            caption: botInfo
+            caption: botInfo,
+            contextInfo: {
+                forwardingScore: 999,
+                isForwarded: false
+            }
         }, { quoted: message });
 
-        // **METHOD 1: Try sending as voice note (PTT) - Best for auto-play**
-        try {
-            const audioResponse = await axios.get('https://files.catbox.moe/mhmstw.mp3', {
-                responseType: 'arraybuffer',
-                timeout: 15000,
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (WhatsApp Bot)'
+        // **FIXED: Use a reliable MP3 URL that works with WhatsApp**
+        // Using a different audio source - try multiple options
+        const audioUrls = [
+            'https://files.catbox.moe/igtxrn.mp3', // Alternative from catbox
+            'https://files.catbox.moe/igtxrn.mp3', // Another option
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Reliable test MP3
+        ];
+
+        let audioSent = false;
+        
+        // Try each audio URL until one works
+        for (let i = 0; i < audioUrls.length; i++) {
+            try {
+                console.log(`Trying audio URL ${i + 1}: ${audioUrls[i]}`);
+                
+                // Download the audio file
+                const audioResponse = await axios.get(audioUrls[i], { 
+                    responseType: 'arraybuffer',
+                    timeout: 10000,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+                
+                const audioBuffer = Buffer.from(audioResponse.data, 'binary');
+                
+                // Check if buffer has content
+                if (audioBuffer.length < 1000) {
+                    console.log(`Audio URL ${i + 1} returned small file, trying next...`);
+                    continue;
                 }
-            });
-            
-            const audioBuffer = Buffer.from(audioResponse.data);
-            
-            // **METHOD 1A: Send as voice note (highest auto-play chance)**
+                
+                console.log(`Audio downloaded successfully: ${audioBuffer.length} bytes`);
+                
+                // Send as audio message with proper properties
+                await sock.sendMessage(chatId, {
+                    audio: audioBuffer,
+                    mimetype: 'audio/mpeg',
+                    ptt: false, // Changed to false as true might cause issues
+                    fileName: '404-XMD-Theme.mp3',
+                    contextInfo: {
+                        isForwarded: true,
+                        forwardingScore: 1,
+                        stanzaId: message.key.id,
+                        participant: message.key.participant || message.key.remoteJid
+                    }
+                });
+                
+                console.log(`Audio sent successfully from URL ${i + 1}`);
+                audioSent = true;
+                break; // Exit loop if successful
+                
+            } catch (audioError) {
+                console.log(`Failed with URL ${i + 1}:`, audioError.message);
+                // Try next URL
+            }
+        }
+        
+        if (!audioSent) {
+            // If all URLs fail, send a text message with link
+            console.log('All audio URLs failed, sending text fallback');
             await sock.sendMessage(chatId, {
-                audio: audioBuffer,
-                mimetype: 'audio/mp4', // Try mp4 for better compatibility
-                ptt: true, // PUSH TO TALK - This often triggers auto-play
-                waveform: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Fake waveform
-                seconds: 30, // Approximate duration
-                contextInfo: {
-                    forwardingScore: 20,
-                    isForwarded: true,
-                    mentionedJid: [message.key.participant || message.key.remoteJid]
-                }
-            });
-            
-            // **METHOD 1B: Alternative - Send as document with audio mimetype**
-            setTimeout(async () => {
-                try {
-                    await sock.sendMessage(chatId, {
-                        document: audioBuffer,
-                        mimetype: 'audio/mpeg',
-                        fileName: '404-XMD Theme.mp3',
-                        caption: '🔊 Click to play: 404-XMD Theme Music',
-                        contextInfo: {
-                            forwardingScore: 10,
-                            isForwarded: true
-                        }
-                    });
-                } catch (docError) {
-                    console.log('Document method failed:', docError.message);
-                }
-            }, 1000);
-            
-        } catch (audioError) {
-            console.error('Audio error:', audioError.message);
-            await sock.sendMessage(chatId, {
-                text: '🎵 *Audio Link*\n\nPlay this: https://files.catbox.moe/igtxrn.mp3\n\n(Click the link to listen)'
+                text: '🎵 *Audio Issue*\n\nCould not send audio file.\nTry this link instead:\nhttps://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
             });
         }
 
         // Send final status message
-        const finalMsg = `
-${pingEmoji} *PING STATUS REPORT*
-━━━━━━━━━━━━━━━━━━━━
-📊 *Response Time*: ${ping}ms
-🎯 *Quality*: ${pingStatus}
-🎵 *Audio Status*: ${ping < 500 ? 'Delivered' : 'Check Connection'}
-⏰ *Checked at*: ${new Date().toLocaleTimeString()}
-━━━━━━━━━━━━━━━━━━━━
-💡 *Tip*: If audio doesn't auto-play, tap the voice note!`;
-
-        setTimeout(async () => {
-            await sock.sendMessage(chatId, {
-                text: finalMsg,
-                contextInfo: {
-                    mentionedJid: [message.key.participant || message.key.remoteJid]
-                }
-            });
-        }, 2000);
+        const qualityMsg = ping < 100 ? 
+            `⚡ *Lightning Fast Connection!* ⚡\n\n📊 *Ping*: ${ping}ms\n🎵 *Audio*: ${audioSent ? 'Sent ✅' : 'Link provided'}\n⏰ *Checked*: ${new Date().toLocaleTimeString()}` :
+            ping < 300 ? 
+            `🚀 *Excellent Response Time!* 🚀\n\n📊 *Ping*: ${ping}ms\n🎵 *Audio*: ${audioSent ? 'Sent ✅' : 'Link provided'}\n⏰ *Checked*: ${new Date().toLocaleTimeString()}` :
+            `📡 *Connection Stable* 📡\n\n📊 *Ping*: ${ping}ms\n🎵 *Audio*: ${audioSent ? 'Sent ✅' : 'Link provided'}\n⏰ *Checked*: ${new Date().toLocaleTimeString()}`;
+            
+        await sock.sendMessage(chatId, {
+            text: qualityMsg,
+            contextInfo: {
+                mentionedJid: [message.key.participant || message.key.remoteJid]
+            }
+        });
 
     } catch (error) {
-        console.error('❌ Ping Command Error:', error);
+        console.error('🔥 Error in ping command:', error);
         
-        const errorMsg = `
-❌ *COMMAND FAILED*
-━━━━━━━━━━━━━━━━━━━━
-🔧 *Error*: ${error.message || 'Unknown'}
-💻 *Code*: PING-${Date.now().toString().slice(-6)}
+        const errorMsg = `❌ *Error Detected!*
+        
+🔧 *Issue*: ${error.message || 'Unknown'}
 ⏰ *Time*: ${new Date().toLocaleTimeString()}
-━━━━━━━━━━━━━━━━━━━━
-🔄 *Action*: Please try again in 5 seconds`;
-
-        await sock.sendMessage(chatId, {
-            text: errorMsg
+📊 *Action*: Please try again!`;
+        
+        await sock.sendMessage(chatId, { 
+            text: errorMsg,
+            contextInfo: {
+                mentionedJid: [message.key.participant || message.key.remoteJid]
+            }
         }, { quoted: message });
     }
 }
