@@ -83,8 +83,8 @@ async function pingCommand(sock, chatId, message) {
         // **FIXED: Use a reliable MP3 URL that works with WhatsApp**
         // Using a different audio source - try multiple options
         const audioUrls = [
-            'https://files.catbox.moe/igtxrn.mp3', // Alternative from catbox
-            'https://files.catbox.moe/igtxrn.mp3', // Another option
+            'https://files.catbox.moe/mhmstw.mp3', // Alternative from catbox
+            'https://files.catbox.moe/mhmstw.mp3', // Another option
             'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Reliable test MP3
         ];
 
