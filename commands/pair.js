@@ -5,7 +5,7 @@ async function pairCommand(sock, chatId, message, q) {
     try {
         if (!q) {
             return await sock.sendMessage(chatId, {
-                text: "Please provide valid WhatsApp number\nExample: .pair 254769769295",
+                text: "Please provide a valid WhatsApp number\nExample: .pair 254769769295\nOr: .pair 254769769295,254700000000",
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
@@ -19,12 +19,20 @@ async function pairCommand(sock, chatId, message, q) {
         }
 
         const numbers = q.split(',')
-            .map((v) => v.replace(/[^0-9]/g, ''))
-            .filter((v) => v.length > 5 && v.length < 20);
+            .map((v) => v.trim().replace(/[^0-9]/g, ''))
+            .filter((v) => v.length > 5 && v.length < 20)
+            .map(num => {
+                // Ensure proper WhatsApp format
+                if (!num.startsWith('0') && !num.startsWith('1') && !num.startsWith('2')) {
+                    // Assume it needs country code - adjust as needed
+                    return '254' + num.replace(/^0+/, '');
+                }
+                return num.replace(/^0+/, ''); // Remove leading zeros
+            });
 
         if (numbers.length === 0) {
             return await sock.sendMessage(chatId, {
-                text: "Invalid number❌️ Please use the correct format!",
+                text: "❌ Invalid number format!\nPlease use: .pair 254769769295",
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
@@ -37,50 +45,30 @@ async function pairCommand(sock, chatId, message, q) {
             });
         }
 
-        for (const number of numbers) {
-            const whatsappID = number + '@s.whatsapp.net';
-            const result = await sock.onWhatsApp(whatsappID);
-
-            if (!result[0]?.exists) {
-                return await sock.sendMessage(chatId, {
-                    text: `That number is not registered on WhatsApp❗️`,
-                    contextInfo: {
-                        forwardingScore: 1,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363401269012709@newsletter',
-                            newsletterName: '404 XMD',
-                            serverMessageId: -1
-                        }
-                    }
-                });
-            }
-
-            await sock.sendMessage(chatId, {
-                text: "Wait a moment for the code",
-                contextInfo: {
-                    forwardingScore: 1,
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: '404 XMD',
-                        serverMessageId: -1
-                    }
+        // Send initial processing message
+        await sock.sendMessage(chatId, {
+            text: `🔄 Processing ${numbers.length} number(s)...`,
+            contextInfo: {
+                forwardingScore: 1,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363161513685998@newsletter',
+                    newsletterName: '404 XMD',
+                    serverMessageId: -1
                 }
-            });
+            }
+        });
 
+        for (const number of numbers) {
             try {
-                const response = await axios.get(`https://four04-the-goat.onrender.com/code?number=${number}`);
+                const whatsappID = number.includes('@') ? number : number + '@s.whatsapp.net';
                 
-                if (response.data && response.data.code) {
-                    const code = response.data.code;
-                    if (code === "Service Unavailable") {
-                        throw new Error('Service Unavailable');
-                    }
-                    
-                    await sleep(5000);
+                // Check if number exists on WhatsApp
+                const result = await sock.onWhatsApp(whatsappID);
+                
+                if (!result || !result[0]?.exists) {
                     await sock.sendMessage(chatId, {
-                        text: `Your pairing code: ${code}`,
+                        text: `❌ ${number}: Not registered on WhatsApp`,
                         contextInfo: {
                             forwardingScore: 1,
                             isForwarded: true,
@@ -91,17 +79,86 @@ async function pairCommand(sock, chatId, message, q) {
                             }
                         }
                     });
-                } else {
-                    throw new Error('Invalid response from server');
+                    continue; // Continue with next number instead of returning
                 }
-            } catch (apiError) {
-                console.error('API Error:', apiError);
-                const errorMessage = apiError.message === 'Service Unavailable' 
-                    ? "Service is currently unavailable. Please try again later."
-                    : "Failed to generate pairing code. Please try again later.";
-                
+
                 await sock.sendMessage(chatId, {
-                    text: errorMessage,
+                    text: `⏳ Generating code for ${number}...`,
+                    contextInfo: {
+                        forwardingScore: 1,
+                        isForwarded: true,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363161513685998@newsletter',
+                            newsletterName: '404 XMD',
+                            serverMessageId: -1
+                        }
+                    }
+                });
+
+                // Try API call
+                try {
+                    const response = await axios.get(`https://four04-the-goat.onrender.com/code?number=${number}`, {
+                        timeout: 10000 // 10 second timeout
+                    });
+                    
+                    if (response.data && response.data.code) {
+                        const code = response.data.code;
+                        
+                        if (code === "Service Unavailable" || code.includes("Error") || code.includes("unavailable")) {
+                            throw new Error('Service Unavailable');
+                        }
+                        
+                        await sleep(3000);
+                        
+                        await sock.sendMessage(chatId, {
+                            text: `✅ *Pairing Code for ${number}*\nCode: \`${code}\``,
+                            contextInfo: {
+                                forwardingScore: 1,
+                                isForwarded: true,
+                                forwardedNewsletterMessageInfo: {
+                                    newsletterJid: '120363401269012709@newsletter',
+                                    newsletterName: '404 XMD',
+                                    serverMessageId: -1
+                                }
+                            }
+                        });
+                        
+                        // Optional: Add small delay between numbers
+                        if (numbers.length > 1) {
+                            await sleep(2000);
+                        }
+                        
+                    } else {
+                        throw new Error('Invalid response from server');
+                    }
+                } catch (apiError) {
+                    console.error(`API Error for ${number}:`, apiError.message);
+                    
+                    // Alternative API endpoint (if available)
+                    // const altResponse = await axios.get(`https://api.example.com/code/${number}`);
+                    
+                    const errorMessage = apiError.message === 'Service Unavailable' 
+                        ? `❌ ${number}: Service unavailable. Try again later.`
+                        : `❌ ${number}: Failed to generate code. ${apiError.message}`;
+                    
+                    await sock.sendMessage(chatId, {
+                        text: errorMessage,
+                        contextInfo: {
+                            forwardingScore: 1,
+                            isForwarded: true,
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: '120363401269012709@newsletter',
+                                newsletterName: '404 XMD',
+                                serverMessageId: -1
+                            }
+                        }
+                    });
+                }
+                
+            } catch (error) {
+                console.error(`Error processing ${number}:`, error);
+                await sock.sendMessage(chatId, {
+                    text: `⚠️ Error processing ${number}: ${error.message}`,
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
@@ -114,10 +171,25 @@ async function pairCommand(sock, chatId, message, q) {
                 });
             }
         }
-    } catch (error) {
-        console.error(error);
+        
+        // Final message
         await sock.sendMessage(chatId, {
-            text: "An error occurred. Please try again later.",
+            text: "✅ Pairing process completed!",
+            contextInfo: {
+                forwardingScore: 1,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363401269012709@newsletter',
+                    newsletterName: '404 XMD',
+                    serverMessageId: -1
+                }
+            }
+        });
+        
+    } catch (error) {
+        console.error('Global error:', error);
+        await sock.sendMessage(chatId, {
+            text: `❌ Critical error: ${error.message}`,
             contextInfo: {
                 forwardingScore: 1,
                 isForwarded: true,
@@ -131,4 +203,4 @@ async function pairCommand(sock, chatId, message, q) {
     }
 }
 
-module.exports = pairCommand; 
+module.exports = pairCommand;
