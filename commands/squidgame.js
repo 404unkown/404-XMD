@@ -1,4 +1,5 @@
 const { delay } = require("@whiskeysockets/baileys");
+const isAdmin = require('../lib/isAdmin'); // Import the same admin check
 
 module.exports = {
     async squidgame(sock, chatId, message, isGroup, participants) {
@@ -12,29 +13,31 @@ module.exports = {
             }
 
             const senderId = message.key.participant || message.key.remoteJid;
+            const isOwner = message.key.fromMe;
             
-            // Check if sender is admin
+            // Use the SAME admin check as kick command
+            if (!isOwner) {
+                const { isSenderAdmin, isBotAdmin } = await isAdmin(sock, chatId, senderId);
+
+                if (!isBotAdmin) {
+                    await sock.sendMessage(chatId, { 
+                        text: "❌ I need to be an admin to kick players!",
+                        quoted: message 
+                    });
+                    return;
+                }
+
+                if (!isSenderAdmin) {
+                    await sock.sendMessage(chatId, { 
+                        text: "❌ Only admins can start Squid Game.",
+                        quoted: message 
+                    });
+                    return;
+                }
+            }
+
             const groupInfo = await sock.groupMetadata(chatId);
-            const senderParticipant = groupInfo.participants.find(p => p.id === senderId);
             
-            if (!senderParticipant || !(senderParticipant.admin || senderParticipant.isSuperAdmin)) {
-                await sock.sendMessage(chatId, { 
-                    text: "❌ Only admins can use this command.",
-                    quoted: message 
-                });
-                return;
-            }
-
-            // Check if bot is admin
-            const botParticipant = groupInfo.participants.find(p => p.id === sock.user.id);
-            if (!botParticipant || !botParticipant.admin) {
-                await sock.sendMessage(chatId, { 
-                    text: "❌ I need to be an admin to kick players!",
-                    quoted: message 
-                });
-                return;
-            }
-
             // Filter non-admin members
             const nonAdminMembers = groupInfo.participants.filter(p => !p.admin);
             
@@ -87,10 +90,8 @@ module.exports = {
             let remainingPlayers = [...players];
             let messageTracker = new Map(); // Track who sent messages
             
-            // Clear previous messages tracker
-            messageTracker.clear();
-            
             const gameRounds = 5; // Number of game rounds
+            
             for (let round = 1; round <= gameRounds && remainingPlayers.length > 1; round++) {
                 // Clear tracker for new round
                 messageTracker.clear();
@@ -100,6 +101,7 @@ module.exports = {
                 
                 let isGreenLight = Math.random() > 0.5;
                 let lightMessage = isGreenLight ? "🟩 *GREEN LIGHT*" : "🟥 *RED LIGHT*";
+                
                 await sock.sendMessage(chatId, { 
                     text: `⏱️ *Round ${round}/${gameRounds}*\n${lightMessage}\n\n${isGreenLight ? "✅ SEND A MESSAGE NOW!" : "❌ DO NOT SEND ANYTHING!"}\n\n⏰ 10 seconds...`,
                     mentions: remainingPlayers.map(p => p.id)
@@ -109,32 +111,29 @@ module.exports = {
                 let roundEndTime = roundStartTime + 10000; // 10 seconds
                 
                 // Set up a message listener for this round
-                let roundMessages = [];
+                let messageHandler;
                 
-                // Create a one-time message handler
-                const messageHandler = async (msg) => {
-                    if (msg.key.remoteJid !== chatId) return;
-                    
-                    const sender = msg.key.participant || msg.key.remoteJid;
-                    const currentTime = Date.now();
-                    
-                    // Only process messages during game time
-                    if (currentTime > roundStartTime && currentTime < roundEndTime) {
-                        roundMessages.push({
-                            sender,
-                            time: currentTime
-                        });
+                // Create promise to handle message listening
+                const messagePromise = new Promise((resolve) => {
+                    messageHandler = async (msg) => {
+                        if (msg.key.remoteJid !== chatId) return;
                         
-                        // Track that this player sent a message
-                        if (messageTracker.has(sender)) {
-                            messageTracker.set(sender, true);
+                        const sender = msg.key.participant || msg.key.remoteJid;
+                        const currentTime = Date.now();
+                        
+                        // Only process messages during game time
+                        if (currentTime > roundStartTime && currentTime < roundEndTime) {
+                            // Track that this player sent a message
+                            if (messageTracker.has(sender)) {
+                                messageTracker.set(sender, true);
+                            }
                         }
-                    }
-                };
-                
-                // Register the listener
-                sock.ev.on('messages.upsert', messageHandler);
-                
+                    };
+                    
+                    // Register the listener
+                    sock.ev.on('messages.upsert', messageHandler);
+                });
+
                 // Wait for the round duration
                 await delay(10000);
                 
@@ -199,13 +198,15 @@ module.exports = {
                 remainingPlayers = survivors;
                 
                 // Round summary
-                await sock.sendMessage(chatId, {
-                    text: `📊 *Round ${round} Results:*\n`
-                        + `🟢 Survivors: ${remainingPlayers.length}\n`
-                        + `🔴 Eliminated: ${eliminatedPlayers.length}\n`
-                        + `${remainingPlayers.length > 0 ? `\n👥 Still in game: ${remainingPlayers.map(p => `@${p.id.split("@")[0]}`).join(', ')}` : ''}`,
-                    mentions: remainingPlayers.map(p => p.id)
-                });
+                if (remainingPlayers.length > 0) {
+                    await sock.sendMessage(chatId, {
+                        text: `📊 *Round ${round} Results:*\n`
+                            + `🟢 Survivors: ${remainingPlayers.length}\n`
+                            + `🔴 Eliminated: ${eliminatedPlayers.length}\n`
+                            + `${remainingPlayers.length > 0 ? `\n👥 Still in game: ${remainingPlayers.map(p => `@${p.id.split("@")[0]}`).join(', ')}` : ''}`,
+                        mentions: remainingPlayers.map(p => p.id)
+                    });
+                }
                 
                 if (remainingPlayers.length <= 1) break;
                 
@@ -233,7 +234,7 @@ module.exports = {
         } catch (error) {
             console.error("Error in squidgame command:", error);
             await sock.sendMessage(chatId, { 
-                text: "❌ An error occurred while running Squid Game.",
+                text: `❌ An error occurred while running Squid Game: ${error.message}`,
                 quoted: message 
             });
         }
