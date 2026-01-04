@@ -1,5 +1,4 @@
 const os = require('os');
-const axios = require('axios');
 const settings = require('../settings.js');
 
 function formatTime(seconds) {
@@ -12,88 +11,43 @@ function formatTime(seconds) {
     return `${secs}s`;
 }
 
-// Function to get user's location from IP
-async function getUserLocation() {
-    try {
-        // Using free IP geolocation API
-        const response = await axios.get('https://ipapi.co/json/', {
-            timeout: 5000
-        });
-        
-        const data = response.data;
-        if (data.city && data.country_name) {
-            return {
-                city: data.city,
-                country: data.country_name,
-                countryCode: data.country_code,
-                region: data.region,
-                timezone: data.timezone,
-                ip: data.ip
-            };
-        }
-    } catch (error) {
-        console.log('IP geolocation failed:', error.message);
-    }
-    
-    // Fallback to a simpler API
-    try {
-        const response = await axios.get('https://ipinfo.io/json', {
-            timeout: 5000
-        });
-        
-        const data = response.data;
-        if (data.city && data.country) {
-            return {
-                city: data.city,
-                country: data.country,
-                countryCode: data.country,
-                region: data.region,
-                timezone: data.timezone,
-                ip: data.ip
-            };
-        }
-    } catch (error) {
-        console.log('Fallback geolocation failed:', error.message);
-    }
-    
-    return null;
-}
-
-// Get time based on user's detected timezone
-function getUserLocalTime(location) {
-    try {
-        if (location && location.timezone) {
-            const now = new Date();
-            return now.toLocaleTimeString('en-US', {
-                timeZone: location.timezone,
-                hour12: true,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-        }
-    } catch (error) {
-        console.log('Timezone conversion failed:', error.message);
-    }
-    
-    // Fallback to Nairobi time
+function getNairobiTime() {
+    // Directly create Nairobi time (EAT = UTC+3)
     const now = new Date();
-    const nairobiHours = (now.getUTCHours() + 3) % 24;
-    const hours = nairobiHours % 12 || 12;
-    const minutes = now.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = now.getUTCSeconds().toString().padStart(2, '0');
-    const ampm = nairobiHours >= 12 ? 'PM' : 'AM';
+    const nairobiOffset = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+    const nairobiTime = new Date(now.getTime() + nairobiOffset);
+    
+    // Format as HH:MM:SS AM/PM
+    let hours = nairobiTime.getUTCHours();
+    const minutes = nairobiTime.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = nairobiTime.getUTCSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Convert 0 to 12
     
     return `${hours}:${minutes}:${seconds} ${ampm}`;
+}
+
+function getNairobiDate() {
+    const now = new Date();
+    const nairobiOffset = 3 * 60 * 60 * 1000;
+    const nairobiTime = new Date(now.getTime() + nairobiOffset);
+    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const day = days[nairobiTime.getUTCDay()];
+    const date = nairobiTime.getUTCDate();
+    const month = months[nairobiTime.getUTCMonth()];
+    const year = nairobiTime.getUTCFullYear();
+    
+    return `${day}, ${month} ${date}, ${year}`;
 }
 
 async function pingCommand(sock, chatId, message) {
     try {
         const start = Date.now();
-        
-        // Get user's location in background
-        const locationPromise = getUserLocation();
-        
         await sock.sendMessage(chatId, { text: '🏓 Pinging...' }, { quoted: message });
         const end = Date.now();
         const ping = end - start;
@@ -102,12 +56,10 @@ async function pingCommand(sock, chatId, message) {
         const totalMem = (os.totalmem() / (1024 ** 3)).toFixed(1);
         const usedMem = ((os.totalmem() - os.freemem()) / (1024 ** 3)).toFixed(1);
         
-        // Get location data
-        const location = await locationPromise;
-        const userTime = getUserLocalTime(location);
-        
-        // Build status message
-        let status = `
+        const nairobiTime = getNairobiTime();
+        const nairobiDate = getNairobiDate();
+
+        const status = `
 ┌── *404-XMD STATUS* ──
 │
 │ ⚡ *Speed:* ${ping}ms
@@ -116,47 +68,19 @@ async function pingCommand(sock, chatId, message) {
 │ 🧠 *RAM:* ${usedMem}GB/${totalMem}GB
 │ 🏷️ *Version:* v${settings.version}
 │
-│ 🕒 *Your Time:* ${userTime}
-        `;
-        
-        // Add location info if available
-        if (location) {
-            status += `
-│ 📍 *Your Location:* ${location.city}, ${location.country}
-│ 🌐 *Timezone:* ${location.timezone || 'EAT (UTC+3)'}
-│ 🔢 *IP:* ${location.ip.substring(0, 8)}...`;
-        } else {
-            status += `
-│ 📍 *Default Location:* Nairobi, Kenya
-│ 🌐 *Timezone:* EAT (UTC+3)`;
-        }
-        
-        status += `
+│ 📍 *Location:* Nairobi, KE
+│ 🕒 *Time:* ${nairobiTime}
+│ 📅 *Date:* ${nairobiDate}
 │
-└─────────────────────`;
-        
-        await sock.sendMessage(chatId, { text: status.trim() }, { quoted: message });
+└─────────────────────
+        `.trim();
+
+        await sock.sendMessage(chatId, { text: status }, { quoted: message });
 
     } catch (error) {
         console.error('Ping error:', error);
-        
-        // Even if location fails, show basic ping info
-        const errorStatus = `
-┌── *404-XMD STATUS* ──
-│
-│ ⚡ *Speed:* ${Date.now() - start || 'N/A'}ms
-│ ⏱️ *Uptime:* ${formatTime(process.uptime())}
-│ 🟢 *Status:* Online
-│ 🧠 *RAM:* ${((os.totalmem() - os.freemem()) / (1024 ** 3)).toFixed(1)}GB/${(os.totalmem() / (1024 ** 3)).toFixed(1)}GB
-│ 🏷️ *Version:* v${settings.version}
-│
-│ 📍 *Location:* Could not detect
-│ ⚠️ *Note:* Location service unavailable
-│
-└─────────────────────`.trim();
-        
         await sock.sendMessage(chatId, { 
-            text: errorStatus 
+            text: `❌ Error: ${error.message}` 
         }, { quoted: message });
     }
 }
