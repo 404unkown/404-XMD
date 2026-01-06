@@ -1,8 +1,8 @@
 {
-  "name": "DARKZONE-MD",
+  "name": "Rickydewizard-MD",
   "description": "Javascript WhatsApp bot made by 𝐸𝑅𝐹𝒜𝒩 𝒜𝐻𝑀𝒜𝒟",
-  "logo": "https://files.catbox.moe/jecbfo.jpg",
-  "keywords": ["DARKZONE-MD"],
+  "logo": "https://img.shields.io/badge/📥_DOWNLOAD_ZIP",
+  "keywords": ["Rickydewizard-MD"],
   "success_url": "/",
 
     "stack": "container",
@@ -16,7 +16,7 @@
     "STICKER_NAME": {
       "description": "type your sticker pack name.",
       "required": false,
-      "value": "𝐸𝑅𝐹𝒜𝒩"
+      "value": "Iamrickydewizard"
     }, 
       
     "PREFIX": {
@@ -78,7 +78,7 @@
     "AUTO_STATUS_MSG": {
       "description": "Type custom message on status reply",
       "required": true,
-      "value": "*SEEN YOUR STATUS BY DARKZONE-MD ❤️*"
+      "value": "*SEEN YOUR STATUS BY Rickydewizard-MD ❤️*"
    
      }, 
     
@@ -91,14 +91,14 @@
     "OWNER_NUMBER": {
       "description": "put the owner number for bot.",
       "required": false,
-      "value": "923306137477"
+      "value": "254706633030"
 
     }, 
 
     "BOT_NAME": {
       "description": "Type here the bot name.",
       "required": false,
-      "value": "DARKZONE-MD"
+      "value": "Rickydewizard-MD"
 
       }, 
 
@@ -137,7 +137,7 @@
      "DESCRIPTION": {
       "description": "add caption for menu and other",
       "required": false,
-      "value": "*CREATER 𝐸𝑅𝐹𝒜𝒩 𝒜𝐻𝑀𝒜𝒟*"
+      "value": "*Powered by Rickydewizard*"
     },
 
       "DELETE_LINKS": {
