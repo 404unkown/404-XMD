@@ -61,7 +61,7 @@
 <div align="center">
 
 [![Railway](https://img.shields.io/badge/🚂_RAILWAY-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app/new?template=https://github.com/404unkown/404-XMD)
-[![Heroku](https://img.shields.io/badge/⚡_HEROKU-430098?style=for-the-badge&logo=heroku&logoColor=white)](https://dashboard.heroku.com/new?template=404-XMD/tree/patch-1)
+[![Heroku](https://img.shields.io/badge/⚡_HEROKU-430098?style=for-the-badge&logo=heroku&logoColor=white)](https://dashboard.heroku.com/new?template=https://github.com/Rickydewizard/404-XMD)
 [![Render](https://img.shields.io/badge/🌈_RENDER-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy?repo=https://github.com/404unkown/404-XMD)
 [![Replit](https://img.shields.io/badge/💻_REPLIT-F26207?style=for-the-badge&logo=replit&logoColor=white)](https://replit.com/github/404unkown/404-XMD)
 
