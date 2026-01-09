@@ -13,7 +13,7 @@ const settings = {
   PREFIX: '.', 
   updateZipUrl: "https://github.com/404unkown/404-XMD/archive/refs/heads/main.zip",
   AUTO_STICKER: 'false',
-  AUTO_RECORDING: 'true',
+  AUTO_RECORDING: 'false',
 };
 
 module.exports = settings;
