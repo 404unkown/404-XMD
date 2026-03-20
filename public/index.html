@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes, viewport-fit=cover" />
+  <title>404-XMD · WhatsApp Bot</title>
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="404-XMD - A powerful WhatsApp bot with advanced features, auto-replies, media tools, and security.">
+  <meta name="keywords" content="whatsapp bot, 404-XMD, automation, whatsapp tools">
+  <meta name="author" content="404_unkown">
+  <meta name="theme-color" content="#6d28d9">
+
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Simplified Background -->
+  <div class="gradient-bg"></div>
+  <div class="noise"></div>
+
+  <!-- ==================== CHANNEL MODAL ==================== -->
+  <div id="channelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🔔 Important</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon">📢</div>
+        <p class="modal-message">Follow to use 404-XMD</p>
+        <div class="channel-grid">
+          <a href="https://whatsapp.com/channel/0029Vb5ytZEE50UbwV7xBv1k" target="_blank" class="channel-card wa">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
+          <a href="https://t.me/Four04unkown" target="_blank" class="channel-card tg">
+            <i class="fab fa-telegram"></i>
+            <span>Telegram</span>
+          </a>
+          <a href="https://instagram.com/_404_unkown" target="_blank" class="channel-card ig">
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+          <a href="https://cyberdark.site" target="_blank" class="channel-card web">
+            <i class="fas fa-globe"></i>
+            <span>Website</span>
+          </a>
+        </div>
+        <button class="btn btn-primary modal-btn" id="confirmFollow">
+          <i class="fas fa-check"></i> Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="logo">M</span>
+        <span class="brand-name">404-XMD</span>
+      </div>
+      <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#connect" class="nav-link">Connect</a>
+        <a href="#links" class="nav-link">Links</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          v2.0 · Online
+        </div>
+        <h1 class="hero-title">
+          <span class="gradient-text">404-XMD</span>
+        </h1>
+        <p class="hero-subtitle">Powerful WhatsApp Bot</p>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <i class="fas fa-bolt stat-icon"></i>
+            <div>
+              <div class="stat-value" id="activeSessions">0</div>
+              <div class="stat-label">Active</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-users stat-icon"></i>
+            <div>
+              <div class="stat-value" id="totalUsers">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+          <div class="stat-card capacity-card">
+            <i class="fas fa-chart-line stat-icon"></i>
+            <div>
+              <div class="stat-value" id="connectionPercentage">0%</div>
+              <div class="stat-label">Capacity</div>
+            </div>
+            <div class="capacity-bar">
+              <div class="capacity-fill" id="connectionBar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-card">
+      <h2 class="section-title">✨ Features</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <i class="fas fa-reply-all"></i>
+          <span>Auto-Replies</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-film"></i>
+          <span>Media Tools</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-puzzle-piece"></i>
+          <span>100+ Cmds</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-shield"></i>
+          <span>Security</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-download"></i>
+          <span>Downloader</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-gamepad"></i>
+          <span>Games</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Server Status -->
+    <section class="section-card server-status">
+      <h2 class="section-title">📊 Server Status</h2>
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="status-label">Uptime</span>
+          <span class="status-value" id="serverUptime">0 min</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Memory</span>
+          <span class="status-value" id="memoryUsage">0 MB</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">CPU</span>
+          <span class="status-value" id="cpuLoad">0.00</span>
+        </div>
+      </div>
+      <div id="connectionWarning" class="warning-message"></div>
+    </section>
+
+    <!-- Connect Section -->
+    <section id="connect" class="section-card">
+      <h2 class="section-title">🔗 Connect WhatsApp</h2>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <span>Enter number with country code</span>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <span>Get 8-digit code</span>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <span>WhatsApp → Linked Devices</span>
+        </div>
+      </div>
+
+      <div class="pairing-box">
+        <div class="input-group">
+          <i class="fas fa-phone-alt"></i>
+          <input type="tel" id="phone" placeholder="2348153103731" inputmode="numeric" pattern="[0-9]*">
+        </div>
+
+        <button class="btn btn-primary" id="requestPairing">
+          <i class="fas fa-key"></i> Get Code
+        </button>
+
+        <div id="pairingCodeContainer" class="code-container" style="display: none;">
+          <div class="code-box">
+            <span id="pairingCode" class="code">000-000</span>
+            <button class="btn-copy" id="copyCodeBtn">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+          <p class="code-hint">Enter this code in WhatsApp</p>
+        </div>
+
+        <div id="status" class="status-message"></div>
+      </div>
+    </section>
+
+    <!-- Links Section -->
+    <section id="links" class="section-card">
+      <h2 class="section-title">🔗 Community</h2>
+      <div class="links-list">
+        <a href="https://whatsapp.com/channel/0029Vb5ytZEE50UbwV7xBv1k" target="_blank" class="link-item wa">
+          <i class="fab fa-whatsapp"></i>
+          <span>WhatsApp Channel</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://t.me/Four04unkown" target="_blank" class="link-item tg">
+          <i class="fab fa-telegram"></i>
+          <span>Telegram Channel</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://instagram.com/_404_unkown" target="_blank" class="link-item ig">
+          <i class="fab fa-instagram"></i>
+          <span>Instagram</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://cyberdark.site" target="_blank" class="link-item web">
+          <i class="fas fa-globe"></i>
+          <span>Main Website</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://t.me/+ENM1h415ZUAzMmY0" target="_blank" class="link-item tg">
+          <i class="fab fa-telegram"></i>
+          <span>Telegram Group</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://youtube.com/@404Tech-b7" target="_blank" class="link-item yt">
+          <i class="fab fa-youtube"></i>
+          <span>YouTube</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <p>© <span id="year">2026</span> 404-XMD</p>
+    <p class="footer-heart">_404_unkown <i class="fas fa-heart"></i></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
