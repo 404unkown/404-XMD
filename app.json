@@ -1,0 +1,42 @@
+{
+  "name": "404-XMD",
+  "description": "Advanced WhatsApp bot with multi-browser support, AI features, and group management",
+  "repository": "https://github.com/yourusername/404-XMD",
+  "logo": "https://files.catbox.moe/rzmxet.png",
+  "keywords": ["whatsapp", "bot", "baileys", "whatsapp-bot", "multi-device", "ai", "chatbot"],
+  "env": {
+    "ownerNumber": {
+      "description": "Your WhatsApp phone number (with country code, no + sign)",
+      "required": true,
+      "value": "254712345678"
+    },
+    "sessionId": {
+      "description": "Your session ID from pairing (format: _404_XMD_SESSION_<base64>)",
+      "required": true,
+      "value": "_404_XMD_SESSION_NTQyNzEyMzQ1Njc4"
+    },
+    "PREFIX": {
+      "description": "Command prefix for the bot",
+      "required": false,
+      "value": "."
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "scripts": {
+    "postdeploy": "npm install"
+  },
+  "stack": "heroku-22"
+}

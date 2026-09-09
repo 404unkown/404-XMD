@@ -1,0 +1,23 @@
+{
+  "effects": {
+    "deep": {
+      "ffmpegArgs": ["-af", "atempo=4/4,asetrate=44500*2/3"],
+      "description": "Make audio sound deeper",
+      "emoji": "🗣️"
+    },
+    "smooth": {
+      "ffmpegArgs": ["-filter:a", "aresample=48000,asetrate=48000*0.8"],
+      "description": "Smooth out audio",
+      "emoji": "🌀"
+    },
+    "fat": {
+      "ffmpegArgs": ["-filter:a", "atempo=1.6,asetrate=22100"],
+      "description": "Make audio sound fat/bassy",
+      "emoji": "🍔"
+    }
+  },
+  "settings": {
+    "tempDir": "../temp",
+    "timeout": 30000
+  }
+}
