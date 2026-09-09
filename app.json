@@ -1,7 +1,7 @@
 {
   "name": "404-XMD",
   "description": "Advanced WhatsApp bot with multi-browser support, AI features, and group management",
-  "repository": "https://github.com/yourusername/404-XMD",
+  "repository": "https://github.com/404unkown/404-XMD",
   "logo": "https://files.catbox.moe/rzmxet.png",
   "keywords": ["whatsapp", "bot", "baileys", "whatsapp-bot", "multi-device", "ai", "chatbot"],
   "env": {
