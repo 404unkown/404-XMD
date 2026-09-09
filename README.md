@@ -1,4 +1,4 @@
-# 🔥 404-XMD
+# 404-XMD
 
 > **WhatsApp Multi-Device Bot | Built with Baileys**
 
@@ -6,7 +6,7 @@
 
 ## 🔗 Quick Links
 
-| Service | Button |
+| Service | press |
 |---------|--------|
 | **Get Session ID** | [![Pair Code](https://img.shields.io/badge/PAIR_CODE-4F46E5?style=for-the-badge&logo=codeberg&logoColor=white)](https://pair.cyberdark.site) |
 | **Host with Us** | [![CyberDark Hosting](https://img.shields.io/badge/HOST_WITH_US-FF6B00?style=for-the-badge&logo=cloudflare&logoColor=white)](https://cyberdark.site) |
@@ -51,6 +51,6 @@
 | **CyberDark Hosting** | [![Deploy on CyberDark](https://img.shields.io/badge/DEPLOY_ON_CYBERDARK-FF6B00?style=for-the-badge&logo=cloudflare&logoColor=white)](https://cyberdark.site) |
 | **Render** | [![Deploy to Render](https://img.shields.io/badge/DEPLOY_TO_RENDER-007FFF?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy?repo=https://github.com/404unkown/404-XMD) |
 | **Heroku** | [![Deploy to Heroku](https://img.shields.io/badge/DEPLOY_TO_HEROKU-430098?style=for-the-badge&logo=heroku&logoColor=white)](https://dashboard.heroku.com/new?template=https://github.com/404unkown/404-XMD) |
-| **Punnel** | [![Deploy to Punnel](https://img.shields.io/badge/DEPLOY_TO_PUNNEL-FF6B00?style=for-the-badge&logo=cloudflare&logoColor=white)](https://punnel.com) |
+| **Punnel** | [![Deploy to Punnel](https://img.shields.io/badge/DEPLOY_TO_PUNNEL-FF6B00?style=for-the-badge&logo=cloudflare&logoColor=white)](https://dashboard.katabump.com) |
 
 ### Manual Setup
